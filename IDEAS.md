@@ -15,6 +15,7 @@
 - [ ] Подменить кодогенерированные спрайты паками с itch.io (см. §9)
 - [ ] Волны 2–3, второй шампур, кооп
 
+**Live:** https://averjahn.github.io/zhmurki-game/ (repo Averjahn/zhmurki-game)
 **Переход между уровнями:** `?level=0..2` в адресе, кнопка «ДАЛЬШЕ» после выхода с района.
 **Запуск:** `python3 -m http.server 4800 --directory zhmurki-game` → http://localhost:4800 (three.js грузится с jsdelivr).
 **Тест-хук:** `window.__game.step(sec)` крутит игру синхронно, `__game.shootAt(x,z)` стреляет в точку мира.
