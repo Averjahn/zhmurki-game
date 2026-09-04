@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Шашлык-шутер</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="style.css">
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"}}</script>
+</head>
+<body>
+<div id="stage">
+  <canvas id="gl" width="640" height="360"></canvas>
+  <div id="bubbles"></div>
+
+  <div id="hud">
+    <div class="panel" id="party">
+      <div class="portraits"><canvas id="p1" width="32" height="32"></canvas><canvas id="p2" width="32" height="32"></canvas></div>
+      <div class="names"><span>Серёга</span><span>Саймон</span></div>
+      <div class="hp-label">Здоровье</div>
+      <div class="hp"><div id="hpbar"></div></div>
+    </div>
+    <div class="panel" id="weapon">
+      <canvas id="wicon" width="48" height="16"></canvas>
+      <div id="ammo">8/40</div>
+    </div>
+    <div class="panel" id="task">
+      <div class="task-title">ЗАДАЧА.</div>
+      <div id="t1">Разобраться с чушпанами <span id="t1c"></span></div>
+      <div id="t2">Выйти с района</div>
+    </div>
+    <div class="panel" id="say"><span class="who">СЕРЁГА:</span><br><span id="sayline">Всё в кетчупе, всё в кетчупе...</span></div>
+    <div id="hint"></div>
+    <div id="reloadbar"><div></div></div>
+    <div id="blind"></div>
+    <div id="lvlname"></div>
+    <div id="banner"></div>
+  </div>
+
+  <div id="overlay">
+    <div class="box">
+      <h1>ШАШЛЫК-ШУТЕР</h1>
+      <p class="sub">по мотивам «Жмурок». Уровень 1: Двор со складом</p>
+      <p>WASD — ходить · мышь — целиться · ЛКМ — стрелять шашлыком<br>R — нанизать мясо · E у мангала — пополнить запас</p>
+      <p>Чушпаны хотят наесться. Корми их, пока не лягут.</p>
+      <button id="start">ПОГНАЛИ</button>
+    </div>
+  </div>
+</div>
+<script type="module" src="js/game.js"></script>
+</body>
+</html>
