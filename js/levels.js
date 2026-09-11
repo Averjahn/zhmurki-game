@@ -60,7 +60,7 @@ export const LEVELS = [
   {
     name: 'Город', ground: 'asphalt', ambient: 1.3, sky: '#08080a',
     yard: { minX: -28, maxX: 28, minZ: -20, maxZ: 20 },
-    spawns: [v(0, -19), v(-27, 0), v(27, 0), v(0, 19)], exit: v(0, -19), mangal: v(0, 13),
+    spawns: [v(0, -19), v(-27, 0), v(27, 0), v(0, 19)], exit: v(0, -19), mangal: v(3, 13),
     playerStart: v(0, 16),
     waves: [
       { name: 'ВОЛНА 1', interval: 1.9, list: ['sportik', 'hudoy', 'sportik', 'gopnik', 'sportik', 'hudoy', 'byk'] },
@@ -92,8 +92,8 @@ export const LEVELS = [
       c.box(4.2, 1.4, 2, 7, 14, c.lam(c.T.metal, '#4a2a2a'));
       c.box(4.2, 1.4, 2, -20, -5, c.lam(c.T.metal, '#2a4a3a'));
       [[3, 4], [3.6, 4], [-20, 8], [-19, 8.6], [22, -3], [22.8, -3.6], [1, -16], [-2, -17]].forEach(([x, z], i) => c.box(1, 1, 1, x, z, c.m.wood, { y: i % 3 === 1 ? 1 : 0 }));
-      [[0, 6], [-8, -2], [9, 2], [-24, 12], [24, -12]].forEach(([x, z]) => c.barrel(x, z));
-      c.mangal(0, 13); c.lamp(-4, -3); c.lamp(4, 3); c.lamp(-22, 14); c.lamp(22, -14); c.lamp(-3, 14);
+      [[1.8, 6], [-8, -2], [9, 2], [-24, 12], [24, -12]].forEach(([x, z]) => c.barrel(x, z));
+      c.mangal(3, 13); c.lamp(-4, -3); c.lamp(4, 3); c.lamp(-22, 14); c.lamp(22, -14); c.lamp(0, 14);
     },
   },
   {
