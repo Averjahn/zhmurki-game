@@ -448,7 +448,7 @@ function endGame(win) {
   $('screenMode').hidden = true; $('screenPlay').hidden = false;
   const h1 = ov.querySelector('h1'), sub = $('playSub');
   h1.textContent = win ? (lastLevel ? 'ИГРА ПРОЙДЕНА' : 'РАЙОН ПРОЙДЕН') : 'ТЕБЯ ОБЪЕЛИ';
-  sub.textContent = win ? (lastLevel ? 'Михалыч лежит. Все в кетчупе. Титры.' : `Дальше: ${LEVELS[levelIdx + 1].name}`) : 'Голодные добрались до party.';
+  sub.textContent = win ? (lastLevel ? 'Михалыч лежит. Все в кетчупе. Титры.' : `Дальше: ${LEVELS[levelIdx + 1].name}`) : 'Голодные добрались до Серёги и Саймона.';
   ov.querySelectorAll('#screenPlay p:not(#playSub)').forEach(p => p.remove()); $('roomInfo').textContent = '';
   const b = $('start'); b.hidden = false; b.textContent = win ? (lastLevel ? 'СНАЧАЛА' : 'ДАЛЬШЕ') : 'ЕЩЁ РАЗ';
   b.onclick = () => { location.search = win && !lastLevel ? `?level=${levelIdx + 1}` : (win ? '' : `?level=${levelIdx}`); };
