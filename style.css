@@ -33,3 +33,16 @@ html,body{margin:0;height:100%;background:#050505;overflow:hidden;font-family:"C
 #reloadbar div{height:100%;background:#c9a15a}
 #blind{position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(40,30,20,.2) 20%,rgba(20,15,10,1) 75%);opacity:0;transition:opacity .15s}
 #lvlname{position:absolute;top:118px;right:14px;font-size:13px;color:#8a8070;text-shadow:1px 1px 0 #000}
+.modebtns{display:flex;flex-direction:column;gap:10px;margin:20px 0 6px}
+.modebtn{font-family:inherit;font-size:15px;padding:10px 20px;background:#2a2622;color:#e8d8b0;border:2px solid #6a6258;cursor:pointer;letter-spacing:1px}
+.modebtn:hover{background:#3a342c;border-color:#c9a15a}
+.modebtn.active{background:#7a1010;border-color:#c33;color:#fff}
+#joinRow{display:flex;gap:8px;justify-content:center;margin:10px 0}
+#joinRow[hidden]{display:none}
+#joinCode{font-family:inherit;font-size:20px;letter-spacing:6px;text-transform:uppercase;width:110px;text-align:center;background:#1a1612;color:#e8d8b0;border:2px solid #6a6258;padding:8px}
+#joinGo{font-family:inherit;font-size:15px;padding:8px 18px;background:#7a1010;color:#fff;border:2px solid #c33;cursor:pointer}
+#netStatus{min-height:22px;font-size:14px;color:#c9a15a;margin-top:10px}
+#netStatus.err{color:#e05a5a}
+#roomInfo{font-size:14px;color:#7ec98a;margin:8px 0;min-height:18px}
+#netBadge{position:absolute;left:14px;top:150px;font-size:12px;color:#8a8070;background:rgba(10,10,10,.7);border:1px solid #444;padding:3px 8px;display:none}
+#netBadge.on{display:block}

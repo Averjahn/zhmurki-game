@@ -110,7 +110,7 @@ export function randomStain(r = Math.random) {
   return { zone, dx: Math.floor(r() * z[2]), dy: Math.floor(r() * z[3]), size: 1 + Math.floor(r() * 2.5), drip: Math.floor(r() * 4) };
 }
 export function drawChar(x, spec, frame = 0, o = {}) {
-  const { skin = '#d9a57a', hair = '#2a1e14', suit = '#8b1a1a', stripe = '#efe6d2', pants, shoes = '#141414', jacket = false, big = false, thin = false, gun = false, cap = false, capColor, dress = false, scarf = false, uniform = false, seeds = false, boss = false } = spec;
+  const { skin = '#d9a57a', hair = '#2a1e14', suit = '#8b1a1a', stripe = '#efe6d2', pants, shoes = '#141414', jacket = false, big = false, thin = false, gun = false, cap = false, capColor, dress = false, scarf = false, uniform = false, seeds = false, boss = false, bald = false } = spec;
   const P = pants || suit;
   x.clearRect(0, 0, 24, 40);
   x.save();
@@ -150,6 +150,7 @@ export function drawChar(x, spec, frame = 0, o = {}) {
   if (scarf) { x.fillStyle = '#c04a70'; x.fillRect(7, 1 + hy, 10, 4); x.fillRect(7, 5 + hy, 1, 6); x.fillRect(16, 5 + hy, 1, 6); }
   else if (uniform) { x.fillStyle = '#2a3a5a'; x.fillRect(7, 0 + hy, 10, 3); x.fillRect(6, 3 + hy, 12, 1); x.fillStyle = '#d0c060'; x.fillRect(11, 1 + hy, 2, 1); }
   else if (cap) { x.fillStyle = capColor || hair; x.fillRect(7, 1 + hy, 10, 3); x.fillRect(16, 3 + hy, 2, 1); }
+  else if (bald) { x.fillStyle = skin; x.fillRect(9, 2 + hy, 6, 2); x.fillStyle = 'rgba(255,255,255,.25)'; x.fillRect(10, 2 + hy, 2, 1); }
   else { x.fillRect(8, 1 + hy, 8, 2); x.fillRect(8, 3 + hy, 1, 3); x.fillRect(15, 3 + hy, 1, 3); }
   if (boss) { x.fillStyle = hair; x.fillRect(9, 8 + hy, 6, 2); }
   x.fillStyle = '#111'; x.fillRect(10, 5 + hy, 1, 1); x.fillRect(13, 5 + hy, 1, 1);

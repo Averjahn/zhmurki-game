@@ -33,15 +33,31 @@
     <div id="reloadbar"><div></div></div>
     <div id="blind"></div>
     <div id="lvlname"></div>
+    <div id="netBadge"></div>
     <div id="banner"></div>
   </div>
 
   <div id="overlay">
-    <div class="box">
+    <div class="box" id="screenMode">
       <h1>ШАШЛЫК-ШУТЕР</h1>
       <p class="sub">по мотивам «Жмурок». Уровень 1: Двор со складом</p>
+      <div class="modebtns">
+        <button id="modeSolo" class="modebtn">ОДИН</button>
+        <button id="modeHost" class="modebtn">ВДВОЁМ ОНЛАЙН — СОЗДАТЬ КОМНАТУ</button>
+        <button id="modeJoin" class="modebtn">ВДВОЁМ ОНЛАЙН — ВОЙТИ ПО КОДУ</button>
+      </div>
+      <div id="joinRow" hidden>
+        <input id="joinCode" maxlength="4" placeholder="КОД КОМНАТЫ" autocomplete="off">
+        <button id="joinGo">ВОЙТИ</button>
+      </div>
+      <div id="netStatus"></div>
+    </div>
+    <div class="box" id="screenPlay" hidden>
+      <h1>ШАШЛЫК-ШУТЕР</h1>
+      <p class="sub" id="playSub">по мотивам «Жмурок». Уровень 1: Двор со складом</p>
       <p>WASD — ходить · мышь — целиться · ЛКМ — стрелять шашлыком<br>R — нанизать мясо · E у мангала — пополнить запас</p>
       <p>Чушпаны хотят наесться. Корми их, пока не лягут.</p>
+      <div id="roomInfo"></div>
       <button id="start">ПОГНАЛИ</button>
     </div>
   </div>
