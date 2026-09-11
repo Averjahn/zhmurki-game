@@ -58,6 +58,45 @@ export const LEVELS = [
     },
   },
   {
+    name: 'Город', ground: 'asphalt', ambient: 1.3, sky: '#08080a',
+    yard: { minX: -28, maxX: 28, minZ: -20, maxZ: 20 },
+    spawns: [v(0, -19), v(-27, 0), v(27, 0), v(0, 19)], exit: v(0, -19), mangal: v(0, 13),
+    playerStart: v(0, 16),
+    waves: [
+      { name: 'ВОЛНА 1', interval: 1.9, list: ['sportik', 'hudoy', 'sportik', 'gopnik', 'sportik', 'hudoy', 'byk'] },
+      { name: 'ВОЛНА 2', interval: 1.7, list: ['tetka', 'ment', 'sportik', 'gopnik', 'byk', 'hudoy', 'tolstyak', 'sportik'] },
+      { name: 'ВОЛНА 3', interval: 1.9, list: ['byk', 'gopnik', 'tetka', 'ment', 'hudoy', 'sportik', 'sportik', 'gopnik'] },
+    ],
+    // Открытый город: улицы-перекрёсток, по кварталам — глухие дома (препятствие целиком)
+    // и заброшенные (c.enterable) — туда заходишь прямо с улицы, крыша прячется без
+    // всякой подгрузки, интерьер такая же часть карты, как и двор перед ним.
+    build(c) {
+      // NW — глухая аптека
+      const apteka = P.tex(P.signWallTex(['АПТЕКА', 'ЗАКРЫТО'], { color: '#7ec9d8', font: 'bold 16px monospace', y0: 34, lh: 22, w: 128, h: 96 }));
+      c.box(10, 4.2, 7, -14, -9, [c.m.brick, c.m.brick, c.m.brick, c.m.brick, c.lam(apteka), c.m.brick]);
+      c.box(10.3, 0.25, 7.3, -14, -9, c.lam(c.T.roof), { y: 4.2, noCollide: true });
+      // SE — глухой склад
+      c.building(14, 9, 10, 7, 4.0, { mat: c.m.corr });
+      // NE — заброшенный магазин, вход с юга (со стороны перекрёстка)
+      c.enterable(14, -9, 10, 8, 4.0, 's', { wallMat: c.lam(c.T.brick, '#8a7868') });
+      c.box(1, 1, 1, 12, -11, c.m.wood); c.box(1, 1, 1, 16, -7, c.m.wood, { y: 1 });
+      c.barrel(17, -11); c.decal(c.T.bed, 13, -8, 2.4, 0.01, 0.3);
+      // SW — заброшенный подъезд, вход с севера
+      c.enterable(-14, 9, 8, 9, 4.5, 'n', { wallMat: c.lam(c.T.brick, '#6a6258') });
+      c.box(1, 1.4, 1, -12, 11, c.m.wood); c.barrel(-16, 12); c.decal(c.T.bed, -14, 10.5, 2.6, 0.01, 1.1);
+      // маленький заброшенный киоск у перекрёстка — срезать путь между улицами
+      c.enterable(6, -3, 4, 4, 3.2, 'w', { wallMat: c.m.metal });
+      c.barrel(6, -3.5);
+      // припаркованные машины и ящики вдоль улиц
+      c.box(4.2, 1.4, 2, -6, 4, c.lam(c.T.metal, '#3a3a44'));
+      c.box(4.2, 1.4, 2, 7, 14, c.lam(c.T.metal, '#4a2a2a'));
+      c.box(4.2, 1.4, 2, -20, -5, c.lam(c.T.metal, '#2a4a3a'));
+      [[3, 4], [3.6, 4], [-20, 8], [-19, 8.6], [22, -3], [22.8, -3.6], [1, -16], [-2, -17]].forEach(([x, z], i) => c.box(1, 1, 1, x, z, c.m.wood, { y: i % 3 === 1 ? 1 : 0 }));
+      [[0, 6], [-8, -2], [9, 2], [-24, 12], [24, -12]].forEach(([x, z]) => c.barrel(x, z));
+      c.mangal(0, 13); c.lamp(-4, -3); c.lamp(4, 3); c.lamp(-22, 14); c.lamp(22, -14); c.lamp(-3, 14);
+    },
+  },
+  {
     name: 'Дача', ground: 'grass', ambient: 1.1, sky: '#070a08',
     yard: { minX: -17, maxX: 17, minZ: -13, maxZ: 13 },
     spawns: [v(-16, -12), v(16, 0), v(-16, 11)], exit: v(16, -12), mangal: v(4, 3),

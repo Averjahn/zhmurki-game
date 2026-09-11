@@ -64,6 +64,15 @@ function mkBillboard(map, w, h, lit = true) {
   const mat = lit ? new THREE.MeshLambertMaterial({ map, transparent: true, alphaTest: 0.4, side: THREE.DoubleSide }) : new THREE.MeshBasicMaterial({ map, transparent: true, alphaTest: 0.1, depthWrite: false, side: THREE.DoubleSide });
   const m = new THREE.Mesh(g, mat); m.rotation.y = camYaw; return m;
 }
+// Крыши заходимых зданий: прячутся, когда игрок внутри footprint — без экранов
+// загрузки, интерьер целиком встроен в ту же сцену/карту, просто открывается сверху.
+const roofs = [];
+function wallSeg(len, h, t, cx, cz, horizontal, mat, doorGap) {
+  if (!doorGap) { box(horizontal ? len : t, h, horizontal ? t : len, cx, cz, mat); return; }
+  const half = (len - doorGap) / 2;
+  if (horizontal) { box(half, h, t, cx - len / 2 + half / 2, cz, mat); box(half, h, t, cx + len / 2 - half / 2, cz, mat); }
+  else { box(t, h, half, cx, cz - len / 2 + half / 2, mat); box(t, h, half, cx, cz + len / 2 - half / 2, mat); }
+}
 const ctx = {
   box, decal, lam, m: M, T,
   barrel(x, z) { const b = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.5, 1.2, 8), [M.metal, M.dark, M.dark]); b.position.set(x, 0.6, z); scene.add(b); obstacles.push({ x, z, hw: 0.55, hd: 0.55 }); },
@@ -76,6 +85,22 @@ const ctx = {
   lamp(x, z) { box(0.25, 5, 0.25, x, z, M.dark, { noCollide: true }); const l = new THREE.PointLight('#ffd890', 1.6, 12, 1.4); l.position.set(x, 4.6, z); scene.add(l); },
   stall(x, z, color) { box(4, 1.0, 1.4, x, z, M.wood); box(4.4, 0.3, 1.8, x, z, lam(P.tex(P.awningTex(color))), { y: 2.2, noCollide: true }); box(0.15, 2.2, 0.15, x - 2, z + 0.8, M.dark, { noCollide: true }); box(0.15, 2.2, 0.15, x + 2, z + 0.8, M.dark, { noCollide: true }); },
   tree(x, z) { box(0.5, 2.2, 0.5, x, z, lam(T.wood, '#8a7a60')); const c = new THREE.Mesh(new THREE.SphereGeometry(1.6, 6, 5), new THREE.MeshLambertMaterial({ color: '#2e4a1c', flatShading: true })); c.position.set(x, 3.0, z); scene.add(c); },
+  // сплошное здание — препятствие целиком, внутрь не попасть
+  building(x, z, w, d, h, opts = {}) {
+    box(w, h, d, x, z, opts.mat || M.brick);
+    box(w + 0.3, 0.25, d + 0.3, x, z, opts.roofMat || lam(T.roof), { y: h, noCollide: true });
+  },
+  // заброшенное здание со входом — крыша прячется, когда игрок рядом/внутри
+  enterable(x, z, w, d, h, doorSide, opts = {}) {
+    const mat = opts.wallMat || M.brick; const t = 0.3; const doorW = opts.doorW || 1.8;
+    wallSeg(w, h, t, x, z - d / 2 + t / 2, true, mat, doorSide === 'n' ? doorW : 0);
+    wallSeg(w, h, t, x, z + d / 2 - t / 2, true, mat, doorSide === 's' ? doorW : 0);
+    wallSeg(d, h, t, x - w / 2 + t / 2, z, false, mat, doorSide === 'w' ? doorW : 0);
+    wallSeg(d, h, t, x + w / 2 - t / 2, z, false, mat, doorSide === 'e' ? doorW : 0);
+    const roofMesh = box(w + 0.2, 0.2, d + 0.2, x, z, opts.roofMat || lam(T.roof), { y: h, noCollide: true });
+    roofs.push({ mesh: roofMesh, x, z, hw: w / 2 + 1.2, hd: d / 2 + 1.2 });
+    (opts.props || []).forEach(p => this[p.type](...p.args));
+  },
 };
 LEVEL.build(ctx);
 for (let i = 0; i < 6; i++) decal(i % 2 ? T.puddle : T.puddle2, (Math.random() - .5) * 26, (Math.random() - .5) * 20, 1.2 + Math.random(), 0.005);
@@ -435,6 +460,7 @@ function render(dt) {
     if (p.life <= 0) { scene.remove(p.mesh); particles.splice(i, 1); }
   }
   scene.traverse(o => { if (o.userData.flicker) o.scale.setScalar(0.85 + Math.random() * 0.3); });
+  for (const r of roofs) r.mesh.visible = !(Math.abs(player.pos.x - r.x) < r.hw && Math.abs(player.pos.z - r.z) < r.hd);
   for (const [e, el] of bubbleEls) { let t = parseFloat(el.dataset.t) - dt; el.dataset.t = t; if (t <= 0 || !e.mesh.parent) { el.style.display = 'none'; continue; } el.style.display = 'block'; const [sx, sy] = worldToScreen(tmp.copy(e.pos).setY((e.state === 'lying' || e._lying) ? 0.6 : e.h + 0.4)); el.style.left = sx + 'px'; el.style.top = sy + 'px'; }
   if (bannerTimer > 0) { bannerTimer -= dt; if (bannerTimer <= 0) hud.banner.style.opacity = 0; }
   player.mesh.material.color.set(player.hurtT > 0 ? '#ff6060' : '#ffffff');
@@ -508,5 +534,6 @@ window.__game = {
   step(sec, dt = 1 / 60) { for (let t = 0; t < sec; t += dt) { if (started && !gameOver && !levelDone) { if (netRole === 'guest') updateGuest(dt); else updateSim(dt); } render(dt); } },
   shootAt(x, z) { mouseNdc.copy(new THREE.Vector3(x, 0, z).project(camera)); mouseDown = true; this.step(0.05); mouseDown = false; },
   _debugStartHost: async () => { modeHost.click(); },
-  get mate() { return mate; }, get net() { return net; }, get lastSnap() { return lastSnap; }, mirrorEnemies,
+  get mate() { return mate; }, get net() { return net; }, get lastSnap() { return lastSnap; }, mirrorEnemies, roofs, obstacles,
+  get hp() { return sharedHp; }, set hp(v) { sharedHp = v; hud.hp.style.width = Math.max(0, v) + '%'; },
 };
